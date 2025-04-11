@@ -1,0 +1,1 @@
+This is a NBA game predictor that uses two seperate models. The first is a regression model which measures relatively linear relationships. While the other is a random forest model that is able to capture more non-linear data that is skewed. 
