@@ -16,19 +16,19 @@ warnings.filterwarnings('ignore')
 df = pd.read_csv("nba_games_stats.csv")
 
 
-# Home vs Away
+
 df['fg_diff'] = df['home_fg%'] - df['away_fg%']
 df['rebounds_diff'] = df['home_rebounds'] - df['away_rebounds']
-# For turnovers, fewer is better, so we reverse the difference.
+
 df['turnovers_diff'] = df['away_turnovers'] - df['home_turnovers']
 df['assists_diff'] = df['home_assists'] - df['away_assists']
 
-# Define the feature columns and target variable
+
 features = ['fg_diff', 'rebounds_diff', 'turnovers_diff', 'assists_diff']
 X = df[features]
 y = df['home_win']
 
-# Split the dataset into training and testing sets
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, random_state=42
 )
@@ -47,15 +47,15 @@ pipeline_rf = Pipeline([
     ('clf', RandomForestClassifier(random_state=42))
 ])
 
-# Tuning with GridSearchCV.
 
-# Parameters to tune for Logistic Regression
+
+
 param_grid_log = {
     'clf__C': [0.01, 0.1, 1, 10],
     'clf__penalty': ['l2']
 }
 
-# Parameters to tune for Random Forest
+
 param_grid_rf = {
     'clf__n_estimators': [100, 200],
     'clf__max_depth': [None, 5, 10],
@@ -79,7 +79,7 @@ print("------------------------------------------------------------")
 
 
 
-# Predictions from both models
+# Predictions
 pred_log = grid_log.predict(X_test)
 pred_rf = grid_rf.predict(X_test)
 
@@ -90,7 +90,7 @@ print("Random Forest Test Accuracy:", accuracy_score(y_test, pred_rf))
 print("Classification Report for Random Forest:\n", classification_report(y_test, pred_rf))
 print("------------------------------------------------------------")
 
-# Select the model with the higher test set accuracy
+# Higher test wins
 selected_model = grid_log if accuracy_score(y_test, pred_log) >= accuracy_score(y_test, pred_rf) else grid_rf
 
 new_game = pd.DataFrame({
